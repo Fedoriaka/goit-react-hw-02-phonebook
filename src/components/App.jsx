@@ -1,16 +1,66 @@
-export const App = () => {
-  return (
-    <div
+import React, { Component } from 'react';
+import { nanoid } from 'nanoid';
+import { Form } from './Form/Form';
+import { Contacts } from './Contacts/ContactsList';
+import { Filter } from './Filter/Filter';
+export class App extends Component {
+  state = {
+    contacts: [],
+    filter: '',
+  };
+
+  addContact = (name, number) => {
+    const { contacts } = this.state;
+    if (
+      contacts.some(
+        contact => contact.name.toLowerCase() === name.trim().toLowerCase()
+      )
+    ) {
+      alert('Contact with this name already exists!');
+      return;
+    }
+    if (name && number) {
+      const newcontact = { name, id: nanoid(), number };
+
+      this.setState({
+        contacts: [...contacts, newcontact],
+      });
+    }
+  };
+
+  handleFilter = ev => {
+    this.setState({ filter: ev.target.value.toLowerCase() });
+  };
+  getContact = () => {
+    const { contacts, filter } = this.state;
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter)
+    );
+  };
+  handleDeleteContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
+  };
+  render() {
+    return (
+      <div
       style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
       }}
-    >
-      React homework template
-    </div>
-  );
+      >
+        <h1>Phonebook</h1>
+        <Form onAddContact={this.addContact}></Form>
+        <h2>Contacts</h2>
+        <Contacts contacts={this.getContact()} onDeleteContact = {this.handleDeleteContact}></Contacts>
+        <Filter
+          filter={this.state.filter}
+          Searchquery={this.handleFilter}
+        ></Filter>
+      </div>
+    );
+  }
 };

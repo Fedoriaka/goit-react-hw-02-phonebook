@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import { Form } from './Form/Form';
-import { Contacts } from './Contacts/ContactsList';
+import { ContactForm } from './ContactForm/ContactForm';
+import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
+
 export class App extends Component {
   state = {
     contacts: [],
@@ -31,7 +32,7 @@ export class App extends Component {
   handleFilter = ev => {
     this.setState({ filter: ev.target.value.toLowerCase() });
   };
-  getContact = () => {
+  getContacts = () => {
     const { contacts, filter } = this.state;
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter)
@@ -45,22 +46,23 @@ export class App extends Component {
   render() {
     return (
       <div
-      style={{
+        style={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-      }}
+        }}
       >
         <h1>Phonebook</h1>
-        <Form onAddContact={this.addContact}></Form>
+        <ContactForm onAddContact={this.addContact} />
         <h2>Contacts</h2>
-        <Contacts contacts={this.getContact()} onDeleteContact = {this.handleDeleteContact}></Contacts>
-        <Filter
-          filter={this.state.filter}
-          Searchquery={this.handleFilter}
-        ></Filter>
+
+        <Filter filter={this.state.filter} Searchquery={this.handleFilter} />
+        <ContactList
+          contacts={this.getContacts()}
+          onDeleteContact={this.handleDeleteContact}
+        />
       </div>
     );
   }
-};
+}

@@ -1,6 +1,7 @@
 import { ContactsElement } from './ContactsElement';
-import styles from './contacts.module.css';
-export const Contacts = ({ contacts, onDeleteContact}) => {
+import styles from './Contacts.module.css';
+
+export const ContactList = ({ contacts, onDeleteContact }) => {
   return (
     <ul className={styles.list}>
       {contacts.map(contact => (
@@ -8,7 +9,7 @@ export const Contacts = ({ contacts, onDeleteContact}) => {
           key={contact.id}
           contact={contact}
           onDeleteContact={onDeleteContact}
-        ></ContactsElement>
+        />
       ))}
     </ul>
   );
